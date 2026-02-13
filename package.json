@@ -1,24 +1,19 @@
 {
-  "name": "listenova",
+  "name": "epub-to-audiobook",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "dist-electron/main.js",
-  "author": "PacMac <info@pacmacmobile.com>",
-  "description": "AI Audiobook Reader - Listenova",
-  "productName": "Listenova",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && electron-builder",
-    "build:web": "tsc && vite build --config vite.web.config.ts",
-    "start": "node server.js",
+    "dev:desktop": "vite --mode electron",
+    "build": "tsc && vite build",
+    "build:desktop": "tsc && vite build --mode electron && electron-builder",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "epub2": "^3.0.2",
-    "express": "^5.2.1",
     "jszip": "^3.10.1",
     "kokoro-js": "^1.2.1",
     "openai": "^6.21.0",
@@ -42,5 +37,6 @@
     "vite": "^5.1.6",
     "vite-plugin-electron": "^0.28.6",
     "vite-plugin-electron-renderer": "^0.14.5"
-  }
+  },
+  "main": "dist-electron/main.js"
 }

@@ -40,10 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   </React.StrictMode>,
 )
 
-// Use contextBridge
-// @ts-ignore
-if (window.ipcRenderer) {
-  // @ts-ignore
+if (window.ipcRenderer?.on) {
   window.ipcRenderer.on('main-process-message', (_event, message) => {
     console.log(message)
   })
