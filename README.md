@@ -1,30 +1,21 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. Launch the App
+Ensure the Electron window opens with the title "Epub to Audiobook".
+Confirm the UI shows a "TTS Provider" dropdown and an API Key input.
+2. Configure Provider
+Select your desired provider from the dropdown (e.g., OpenAI, ElevenLabs, or Gemini).
+Paste the corresponding API Key into the input field.
+3. Upload EPUB
+Drag and drop an .epub file into the target area.
+Expected: A "Parsing EPUB..." message appears, followed by a list of chapters.
+4. Read a Chapter
+Click the "Read" button next to a chapter.
+Expected:
+Button text changes to "Generating...".
+After a few seconds (depending on length), an audio player appears at the top.
+Audio starts playing automatically.
+You should hear the text content of the chapter.
+5. Playback Controls
+Use the audio player controls (Play/Pause, Seek, Volume) to verify they work.
+Troubleshooting
+Parsing fails: Ensure the EPUB is valid and not DRM-protected.
+Audio not generating: Check the console (Cmd+Option+I) for errors. Verify your API Key has credits.
