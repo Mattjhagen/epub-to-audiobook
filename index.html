@@ -1,13 +1,205 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Audiobook Reader - Local TTS</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        p.subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #c4b5fd;
+        }
+
+        .download-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            margin: 3rem 0;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            min-width: 160px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(118, 75, 162, 0.39);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+        }
+
+        .btn-outline:hover {
+            border-color: #64748b;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn:disabled, .btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .icon {
+            margin-right: 0.5rem;
+            width: 24px;
+            height: 24px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>AI Audiobook Reader</h1>
+        <p class="subtitle">Transform any EPUB into an immersive audiobook with local, privacy-first AI voices. Powered by Kokoro TTS.</p>
+        
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #64748b;">
+            ⚠️ Web App requires local hosting or build steps. <br>
+            Please download the desktop app for the best experience.
+        </p>
+
+        <div class="btn-group">
+            <a href="#download" class="btn btn-primary">Get Desktop App</a>
+            <a href="app.html" class="btn btn-outline" onclick="alert('The Web App version requires a local server or build environment. Please use the Desktop version for now.')">Launch Web App</a>
+        </div>
+    </header>
+
+    <div class="features">
+        <div class="card">
+            <h3>🔒 Local & Private</h3>
+            <p>Processing happens entirely on your device. No data is sent to the cloud.</p>
+        </div>
+        <div class="card">
+            <h3>🗣️ Natural Voices</h3>
+            <p>Experience high-quality, human-like narration powered by the Kokoro AI model.</p>
+        </div>
+        <div class="card">
+            <h3>📚 Smart Parsing</h3>
+            <p>Automatically extracts text from EPUB chapters for seamless listening.</p>
+        </div>
+    </div>
+
+    <div id="download" class="download-section">
+        <h2>Download for Desktop</h2>
+        <p>Current Version: v0.0.0 (Alpha)</p>
+        
+        <div class="btn-group">
+            <a href="https://github.com/Mattjhagen/epub-to-audiobook/releases/latest/download/YourAppName-Mac-0.0.0-Installer.dmg" class="btn btn-primary">
+                <!-- Mac Icon -->
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.21-1.98 1.07-3.11-1.05.05-2.31.72-3.06 1.64-.68.86-1.27 2.11-1.08 3.23 1.19.09 2.4-.62 3.07-1.76z"/></svg>
+                Download for Mac
+            </a>
+            <a href="#" class="btn btn-outline disabled">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h18v18H3V3m17 16V5H4v14h16z"/></svg>
+                Windows (soon)
+            </a>
+            <a href="#" class="btn btn-outline disabled">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l-9.5 5 1.5 13 8 4 8-4 1.5-13L12 2m0 2.2l6.8 3.6-1.3 11-5.5 2.7-5.5-2.7-1.3-11L12 4.2z"/></svg>
+                Linux (soon)
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AI Audiobook Reader. Open Source on GitHub.</p>
+    </footer>
+
+</body>
 </html>
