@@ -9,6 +9,25 @@ interface Chapter {
   text: string
 }
 
+const getProviderLabel = (p: TTSProvider) => {
+  switch (p) {
+    case 'openai': return 'OpenAI';
+    case 'elevenlabs': return 'ElevenLabs';
+    case 'gemini': return 'Google (Gemini)';
+    case 'kokoro': return 'Kokoro (Local)';
+    default: return '';
+  }
+}
+
+const getPlaceholder = (p: TTSProvider) => {
+  switch (p) {
+    case 'openai': return 'sk-...';
+    case 'elevenlabs': return 'xi-...';
+    case 'gemini': return 'AIza...';
+    default: return '';
+  }
+}
+
 function App() {
   const [chapters, setChapters] = useState<Chapter[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -43,7 +62,7 @@ function App() {
   })
 
   const handleRead = async (text: string, index: number) => {
-    if (!apiKey) {
+    if (provider !== 'kokoro' && !apiKey) {
       alert(`Please enter your ${getProviderLabel(provider)} API Key first.`)
       return
     }
@@ -73,24 +92,6 @@ function App() {
     }
   }
 
-  const getProviderLabel = (p: TTSProvider) => {
-    switch (p) {
-      case 'openai': return 'OpenAI';
-      case 'elevenlabs': return 'ElevenLabs';
-      case 'gemini': return 'Google (Gemini)';
-      default: return '';
-    }
-  }
-
-  const getPlaceholder = (p: TTSProvider) => {
-    switch (p) {
-      case 'openai': return 'sk-...';
-      case 'elevenlabs': return 'xi-...';
-      case 'gemini': return 'AIza...';
-      default: return '';
-    }
-  }
-
   return (
     <div className="container">
       <h1>Epub to Audiobook</h1>
@@ -106,19 +107,22 @@ function App() {
             <option value="openai">OpenAI</option>
             <option value="elevenlabs">ElevenLabs</option>
             <option value="gemini">Gemini (Google)</option>
+            <option value="kokoro">Kokoro (Local - Free)</option>
           </select>
         </div>
 
-        <div className="api-key-section">
-          <label>{getProviderLabel(provider)} API Key: </label>
-          <input
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder={getPlaceholder(provider)}
-            className="api-input"
-          />
-        </div>
+        {provider !== 'kokoro' && (
+          <div className="api-key-section">
+            <label>{getProviderLabel(provider)} API Key: </label>
+            <input
+              type="password"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder={getPlaceholder(provider)}
+              className="api-input"
+            />
+          </div>
+        )}
       </div>
 
       <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>

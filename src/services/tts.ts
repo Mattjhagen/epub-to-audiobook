@@ -1,11 +1,45 @@
+// ... existing code ...
 
-export type TTSProvider = 'openai' | 'elevenlabs' | 'gemini';
+export type TTSProvider = 'openai' | 'elevenlabs' | 'gemini' | 'kokoro';
 
 export interface TTSOptions {
-    apiKey: string;
+    apiKey?: string; // Optional for local
     provider: TTSProvider;
     text: string;
-    voiceId?: string; // For ElevenLabs
+    voiceId?: string; // For ElevenLabs or Kokoro voice
+}
+
+// Singleton for Kokoro model to avoid reloading
+let kokoroTTS: any = null;
+// Track loading state to prevent multiple loads
+let kokoroLoadingPromise: Promise<any> | null = null;
+
+async function getKokoroTTS() {
+    if (kokoroTTS) return kokoroTTS;
+
+    if (kokoroLoadingPromise) return kokoroLoadingPromise;
+
+    kokoroLoadingPromise = (async () => {
+        try {
+            // Dynamic import to avoid load-time errors
+            const { KokoroTTS } = await import('kokoro-js');
+
+            const model_id = "onnx-community/Kokoro-82M-ONNX";
+            // Check if we are in a browser environment (Electron Renderer is browser-like)
+            // validation might differ, but from_pretrained should work.
+            const tts = await KokoroTTS.from_pretrained(model_id, {
+                dtype: "fp32", // fp32 is safer for wider device support often, or q8
+            });
+            kokoroTTS = tts;
+            return tts;
+        } catch (e) {
+            console.error("Failed to load Kokoro TTS model:", e);
+            kokoroLoadingPromise = null; // Reset on failure
+            throw e;
+        }
+    })();
+
+    return kokoroLoadingPromise;
 }
 
 export async function generateAudio(options: TTSOptions): Promise<Blob> {
@@ -13,15 +47,44 @@ export async function generateAudio(options: TTSOptions): Promise<Blob> {
 
     switch (provider) {
         case 'openai':
+            if (!apiKey) throw new Error("API Key required for OpenAI");
             return generateAudioOpenAI(text, apiKey);
         case 'elevenlabs':
+            if (!apiKey) throw new Error("API Key required for ElevenLabs");
             return generateAudioElevenLabs(text, apiKey, options.voiceId);
         case 'gemini':
+            if (!apiKey) throw new Error("API Key required for Gemini");
             return generateAudioGemini(text, apiKey);
+        case 'kokoro':
+            return generateAudioKokoro(text, options.voiceId);
         default:
             throw new Error(`Unsupported provider: ${provider}`);
     }
 }
+
+// ... existing helper functions ...
+
+async function generateAudioKokoro(text: string, voiceId: string = 'af_bella'): Promise<Blob> {
+    const tts = await getKokoroTTS();
+
+    // generate returns a RawAudio object
+    const audio = await tts.generate(text, {
+        voice: voiceId,
+    });
+
+    // audio.toWav() returns a Blob in browser env, or Buffer in Node. 
+    // Since we are in Electron Renderer (Frontend), it likely returns a Blob.
+    // If not, we wrap it.
+    const wav = await audio.toWav();
+
+    if (wav instanceof Blob) {
+        return wav;
+    } else {
+        // If it's a buffer or arraybuffer
+        return new Blob([wav], { type: 'audio/wav' });
+    }
+}
+// ... rest of file (splitTextIntoChunks etc) ...
 
 async function generateAudioOpenAI(text: string, apiKey: string): Promise<Blob> {
     const response = await fetch('https://api.openai.com/v1/audio/speech', {

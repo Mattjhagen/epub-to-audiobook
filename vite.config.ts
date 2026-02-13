@@ -1,10 +1,18 @@
 import { defineConfig } from 'vite'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import electron from 'vite-plugin-electron/simple'
 import react from '@vitejs/plugin-react'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      'kokoro-js': path.join(__dirname, 'node_modules/kokoro-js/dist/kokoro.web.js'),
+    },
+  },
   plugins: [
     react(),
     electron({
