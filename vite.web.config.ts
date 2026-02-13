@@ -6,8 +6,9 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Minimal config for Web Build (Render)
+// Minimal config for Web Build (Render/GHPages)
 export default defineConfig({
+    base: './',
     resolve: {
         alias: {
             'kokoro-js': path.join(__dirname, 'node_modules/kokoro-js/dist/kokoro.web.js'),
