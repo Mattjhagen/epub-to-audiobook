@@ -36,46 +36,60 @@ const LandingPage: React.FC<LandingPageProps> = ({ onPreview }) => {
                 </div>
             </div>
 
-            <section className="featured-books">
-                <h2>📚 Featured Demo Audiobooks</h2>
-                <p style={{ textAlign: 'center', color: '#94a3b8', maxWidth: '600px', margin: '0 auto 2rem' }}>
-                    Public-domain classics you can preview. Upload your own EPUB to create custom audiobooks.
-                </p>
+            <section className="public-library">
+                <div className="library-header">
+                    <h2>Public Library</h2>
+                </div>
 
                 <div className="book-grid">
                     <div className="book-card" onClick={() => onPreview("Pride and Prejudice", "Jane Austen")}>
-                        <img src="https://covers.openlibrary.org/b/id/10521258-L.jpg" alt="Pride and Prejudice cover" />
-                        <h4>Pride and Prejudice</h4>
-                        <p>Jane Austen</p>
-                        <button className="preview-btn">Listen Preview</button>
+                        <div className="cover-container">
+                            <img src="https://covers.openlibrary.org/b/id/10521258-L.jpg" alt="Pride and Prejudice" />
+                        </div>
+                        <div className="book-info">
+                            <h4>Pride and Prejudice</h4>
+                            <p className="author">Jane Austen</p>
+                            <p className="duration">~11 hours</p>
+                        </div>
                     </div>
 
                     <div className="book-card" onClick={() => onPreview("Moby-Dick", "Herman Melville")}>
-                        <img src="https://covers.openlibrary.org/b/id/7222246-L.jpg" alt="Moby Dick cover" />
-                        <h4>Moby-Dick</h4>
-                        <p>Herman Melville</p>
-                        <button className="preview-btn">Listen Preview</button>
+                        <div className="cover-container">
+                            <img src="https://covers.openlibrary.org/b/id/7222246-L.jpg" alt="Moby Dick" />
+                        </div>
+                        <div className="book-info">
+                            <h4>Moby-Dick</h4>
+                            <p className="author">Herman Melville</p>
+                            <p className="duration">~24 hours</p>
+                        </div>
                     </div>
 
                     <div className="book-card" onClick={() => onPreview("The Odyssey", "Homer")}>
-                        <img src="https://covers.openlibrary.org/b/id/8231856-L.jpg" alt="The Odyssey cover" />
-                        <h4>The Odyssey</h4>
-                        <p>Homer</p>
-                        <button className="preview-btn">Listen Preview</button>
+                        <div className="cover-container">
+                            <img src="https://covers.openlibrary.org/b/id/8231856-L.jpg" alt="The Odyssey" />
+                        </div>
+                        <div className="book-info">
+                            <h4>The Odyssey</h4>
+                            <p className="author">Homer</p>
+                            <p className="duration">~14 hours</p>
+                        </div>
                     </div>
 
                     <div className="book-card" onClick={() => onPreview("Frankenstein", "Mary Shelley")}>
-                        <img src="https://covers.openlibrary.org/b/id/8773270-L.jpg" alt="Frankenstein cover" />
-                        <h4>Frankenstein</h4>
-                        <p>Mary Shelley</p>
-                        <button className="preview-btn">Listen Preview</button>
+                        <div className="cover-container">
+                            <img src="https://covers.openlibrary.org/b/id/8773270-L.jpg" alt="Frankenstein" />
+                        </div>
+                        <div className="book-info">
+                            <h4>Frankenstein</h4>
+                            <p className="author">Mary Shelley</p>
+                            <p className="duration">~8 hours</p>
+                        </div>
                     </div>
                 </div>
 
-                <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                    {/* Call to action for the dropzone or download */}
+                <div style={{ textAlign: 'center', marginTop: '4rem' }}>
                     <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>
-                        Drag & Drop your EPUB above to start listening!
+                        Drag & Drop your own EPUB file to start listening
                     </p>
                 </div>
             </section>
