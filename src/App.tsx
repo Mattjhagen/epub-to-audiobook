@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { generateAudio } from './services/tts'
+import { generateAudio, TTSProvider } from './services/tts'
 import './App.css'
 
 interface Chapter {
@@ -16,6 +16,7 @@ function App() {
   const [currentChapterIndex, setCurrentChapterIndex] = useState<number | null>(null)
   const [audioUrl, setAudioUrl] = useState<string | null>(null)
   const [apiKey, setApiKey] = useState('')
+  const [provider, setProvider] = useState<TTSProvider>('openai')
 
   const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
@@ -43,7 +44,7 @@ function App() {
 
   const handleRead = async (text: string, index: number) => {
     if (!apiKey) {
-      alert('Please enter your Google API Key first.')
+      alert(`Please enter your ${getProviderLabel(provider)} API Key first.`)
       return
     }
 
@@ -57,7 +58,11 @@ function App() {
     }
 
     try {
-      const blob = await generateAudio(text, apiKey)
+      const blob = await generateAudio({
+        provider,
+        apiKey,
+        text
+      })
       const url = URL.createObjectURL(blob)
       setAudioUrl(url)
     } catch (error: any) {
@@ -68,19 +73,52 @@ function App() {
     }
   }
 
+  const getProviderLabel = (p: TTSProvider) => {
+    switch (p) {
+      case 'openai': return 'OpenAI';
+      case 'elevenlabs': return 'ElevenLabs';
+      case 'gemini': return 'Google (Gemini)';
+      default: return '';
+    }
+  }
+
+  const getPlaceholder = (p: TTSProvider) => {
+    switch (p) {
+      case 'openai': return 'sk-...';
+      case 'elevenlabs': return 'xi-...';
+      case 'gemini': return 'AIza...';
+      default: return '';
+    }
+  }
+
   return (
     <div className="container">
       <h1>Epub to Audiobook</h1>
 
-      <div className="api-key-section">
-        <label>Google API Key: </label>
-        <input
-          type="password"
-          value={apiKey}
-          onChange={(e) => setApiKey(e.target.value)}
-          placeholder="AIza..."
-          className="api-input"
-        />
+      <div className="config-section">
+        <div className="provider-select">
+          <label>TTS Provider: </label>
+          <select
+            value={provider}
+            onChange={(e) => setProvider(e.target.value as TTSProvider)}
+            className="provider-dropdown"
+          >
+            <option value="openai">OpenAI</option>
+            <option value="elevenlabs">ElevenLabs</option>
+            <option value="gemini">Gemini (Google)</option>
+          </select>
+        </div>
+
+        <div className="api-key-section">
+          <label>{getProviderLabel(provider)} API Key: </label>
+          <input
+            type="password"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            placeholder={getPlaceholder(provider)}
+            className="api-input"
+          />
+        </div>
       </div>
 
       <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
