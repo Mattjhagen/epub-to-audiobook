@@ -19,7 +19,7 @@ export default defineConfig({
         outDir: 'dist-web',
         rollupOptions: {
             input: {
-                main: path.resolve(__dirname, 'app.html'),
+                main: path.resolve(__dirname, 'index.html'),
             },
         },
     }

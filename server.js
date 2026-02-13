@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'dist-web')));
 
 app.get(/(.*)/, (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist-web', 'app.html'));
+    res.sendFile(path.join(__dirname, 'dist-web', 'index.html'));
 });
 
 app.listen(PORT, () => {
